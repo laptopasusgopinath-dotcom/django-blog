@@ -1,5 +1,4 @@
-<!-- Header Part -->
- {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,38 +6,77 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+
+    <!-- Custom CSS -->
     <link href="{% static 'css/blog.css' %}" rel="stylesheet">
-  </head>
+</head>
+
 <body>
-  <div class="container">
-    <header class="blog-header py-3">
-      <div class="row flex-nowrap justify-content-between align-items-center">
-        <div class="col-8 pt-1">
-          <a class="blog-header-logo text-dark" href="/">Django Blog</a>
-        </div>
-        <div class="col-4 d-flex justify-content-end align-items-center">
-          <a class="btn btn-sm btn-warning" href="#">Login</a> &nbsp;
-          <a class="btn btn-sm btn-outline-secondary" href="#">Register</a>
-        </div>
+<div class="container">
+
+  <!-- Header -->
+  <header class="blog-header py-3">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+
+      <!-- Logo -->
+      <div class="col-4 pt-1">
+        <a class="blog-header-logo text-dark" href="/">Django Blog</a>
       </div>
-    </header>
 
-    <div class="nav-scroller py-1 mb-2">
-      <nav class="nav d-flex justify-content-between">
-        {% for category in categories %}
-            <a class="p-2 text-muted" href="{% url 'posts_by_category' category.id %}">{{category.category_name}}</a>
-        {% endfor %}
-      </nav>
+      <!-- Search Box -->
+      <div class="col-4">
+        <form action="{% url 'search' %}" method="get">
+          <div class="input-group">
+            <input
+              type="text"
+              name="keyword"
+              value="{{ keyword }}"
+              class="form-control mr-2"
+              placeholder="Enter search term..."
+              aria-label="Enter search term..."
+            />
+            <button type="submit" class="btn btn-success">
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
+
+
+      <!-- Auth Buttons -->
+      <div class="col-4 d-flex justify-content-end align-items-center">
+        <a class="btn btn-sm btn-warning" href="#">Login</a>&nbsp;
+        <a class="btn btn-sm btn-outline-secondary" href="#">Register</a>
+      </div>
+
     </div>
+  </header>
 
-<!-- Main Content Part -->
-{% block content %}{% endblock %}
+  <!-- Categories -->
+  <div class="nav-scroller py-1 mb-2">
+    <nav class="nav d-flex justify-content-between">
+      {% for category in categories %}
+        <a class="p-2 text-muted" href="{% url 'posts_by_category' category.id %}">
+          {{ category.category_name }}
+        </a>
+      {% endfor %}
+    </nav>
+  </div>
 
-<!-- Footer Part -->
- <footer class="blog-footer">
-  <p>Django blog built � by <a href="#">Gopinath Pal</a></p>
-</footer>
+  <!-- Main Content -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="blog-footer">
+    <p>Django blog built by <a href="#">Gopinath Pal</a></p>
+  </footer>
+
+</div>
 </body>
 </html>
