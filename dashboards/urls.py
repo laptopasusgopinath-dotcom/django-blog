@@ -14,4 +14,10 @@ urlpatterns = [
     path('posts/add', add_post, name='add_post'),
     path('posts/edit/<int:pk>', edit_post, name='edit_post'),
     path('posts/delete/<int:pk>', delete_post, name='delete_post'),
+
+    #users
+    path('users/', users, name='users'),
+    path('users/add/', add_user, name='add_user'),
+    path('users/edit/<int:pk>/', edit_user, name='edit_user'),
+    path('users/delete/<int:pk>/', delete_user, name='delete_user'),
 ]
