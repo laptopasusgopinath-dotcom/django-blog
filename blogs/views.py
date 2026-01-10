@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from django.db.models import Q
@@ -36,10 +37,36 @@ def posts_by_category(request, category_id):
 
 def blogs(request, slug):
     single_blog = get_object_or_404(Blog, slug=slug, status='Published')
+
+    '''
+    if request.method == "POST":
+        comment = request.POST.get("comment")
+        Comment.objects.create(
+            comment = comment,
+            user = request.user,
+            blog = single_blog
+        )
+    '''
+
+    if request.method == "POST":
+        comment = Comment()
+        comment.user = request.user
+        comment.blog = single_blog
+        comment.comment = request.POST.get("comment")
+        comment.save()
+        return HttpResponseRedirect(request.path_info) # when redirect to same page use HttpResponseRedirect
+
+
+    # Comments
+    comments = Comment.objects.filter(blog=single_blog).order_by('-created_at')
+    comment_count = comments.count()
     context = {
         'single_blog': single_blog,
+        'comments': comments,
+        'comment_count': comment_count
     }
     return render(request, 'blogs.html', context)
+
 
 def search(request):
     keyword = request.GET.get('keyword', '').strip()

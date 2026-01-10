@@ -26,6 +26,16 @@ class AddUserForm(UserCreationForm):
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        request_user = kwargs.pop('request_user', None)
+        super().__init__(*args, **kwargs)
+
+        # 🔐 If NOT superuser → REMOVE sensitive fields
+        if request_user and not request_user.is_superuser:
+            self.fields.pop('is_superuser')
+            self.fields.pop('user_permissions')
+
+
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -35,3 +45,12 @@ class EditUserForm(forms.ModelForm):
                 attrs={'size': 12}
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        request_user = kwargs.pop('request_user', None)
+        super().__init__(*args, **kwargs)
+
+        # 🔐 If NOT superuser → REMOVE sensitive fields
+        if request_user and not request_user.is_superuser:
+            self.fields.pop('is_superuser')
+            self.fields.pop('user_permissions')

@@ -120,11 +120,11 @@ def users(request):
 
 def add_user(request):
     if request.method == 'POST':
-        form = AddUserForm(request.POST)
+        form = AddUserForm(request.POST, request_user=request.user)
         if form.is_valid():
             form.save()
             return redirect('users')
-    form = AddUserForm()
+    form = AddUserForm(request_user=request.user)
     context = {
         'form': form
     }
@@ -134,11 +134,11 @@ def add_user(request):
 def edit_user(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        form = EditUserForm(request.POST, instance=user)
+        form = EditUserForm(request.POST, instance=user, request_user=request.user)
         if form.is_valid():
             form.save()
             return redirect('users')
-    form = EditUserForm(instance=user)
+    form = EditUserForm(instance=user, request_user=request.user)
     context = {
         'form': form,
         'user': user

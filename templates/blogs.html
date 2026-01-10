@@ -23,7 +23,63 @@
                 <section class="mb-5">
                     <h3 class="fs-5 mb-4">{{single_blog.short_description}}</h3>
                     <p class="fs-5 mb-4">{{single_blog.blog_body}}</p>
-                    </section>
+
+                    <!-- Comments -->
+                    <div class="mt-4">
+                        <h4 class="mb-3">
+                            Comments <span class="text-muted">({{ comment_count }})</span>
+                        </h4>
+
+                        {% if comments %}
+                            {% for comment in comments %}
+                                <div class="card mb-2 shadow-sm">
+                                    <div class="card-body py-2">
+                                        <p class="mb-1">{{ comment }}</p>
+
+                                        <small class="text-muted">
+                                            By <strong>{{ comment.user.username }}</strong>
+                                            · {{ comment.created_at|timesince }} ago
+                                        </small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No comments yet. Be the first to comment!</p>
+                        {% endif %}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                    <!-- Comment Form -->
+                    <div class="card mt-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="mb-3">Leave a Comment</h5>
+
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="form-group">
+                                    <textarea
+                                        name="comment"
+                                        class="form-control"
+                                        rows="3"
+                                        placeholder="Write your comment..."
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mt-2">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                        <div class="alert alert-info mt-3">
+                            Please <a href="{% url 'login' %}" class="font-weight-bold">log in</a>
+                            to write a comment.
+                        </div>
+                    {% endif %}
+                </section>
             </article>
         </div>
         <!-- Side widgets-->

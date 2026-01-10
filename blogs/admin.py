@@ -1,5 +1,14 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 from .models import *
+
+class SuperuserOnlyAdmin(admin.ModelAdmin):
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
+admin.site.unregister(User)
+admin.site.register(User, SuperuserOnlyAdmin)
+
 
 class BlogAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
@@ -19,3 +28,4 @@ admin.site.register(Category)
 admin.site.register(Blog, BlogAdmin)
 admin.site.register(About, aboutAdmin)
 admin.site.register(SocialLink)
+admin.site.register(Comment)
