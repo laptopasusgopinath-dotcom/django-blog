@@ -3,7 +3,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 
@@ -25,44 +24,47 @@
 
   <!-- Header -->
   <header class="blog-header py-3">
-    <div class="row flex-nowrap justify-content-between align-items-center">
+    <div class="row align-items-center">
 
       <!-- Logo -->
-      <div class="col-4 pt-1">
+      <div class="col-12 col-md-4 text-center text-md-left mb-2 mb-md-0">
         <a class="blog-header-logo text-dark" href="/">Django Blog</a>
       </div>
 
-      <!-- Search Box -->
-      <div class="col-4">
+      <!-- Search -->
+      <div class="col-12 col-md-4 mb-2 mb-md-0">
         <form action="{% url 'search' %}" method="get">
           <div class="input-group">
             <input
               type="text"
               name="keyword"
               value="{{ keyword }}"
-              class="form-control mr-2"
-              placeholder="Enter search term..."
-              aria-label="Enter search term..."
+              class="form-control"
+              placeholder="Search..."
             />
-            <button type="submit" class="btn btn-success">
-              Search
-            </button>
+            <div class="input-group-append">
+              <button class="btn btn-success" type="submit">Search</button>
+            </div>
           </div>
         </form>
       </div>
 
-
-      <!-- Auth Buttons -->
-      <div class="col-4 d-flex justify-content-end align-items-center">
+      <!-- Auth -->
+      <div class="col-12 col-md-4 text-center text-md-right">
         {% if user.is_authenticated %}
-        <div class="d-flex align-items-center">
-          <span class="badge badge-pill badge-warning px-3 py-2 mr-3"><a href="{% url 'dashboard' %}" class="text-dark">👤Dashboard</a>
-          </span>
-          <a class="btn btn-sm btn-danger" href="{% url 'logout' %}">Logout</a>
-        </div>
+          <a href="{% url 'dashboard' %}" class="btn btn-warning btn-sm mr-2">
+            👤 Dashboard
+          </a>
+          <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+            Logout
+          </a>
         {% else %}
-        <a class="btn btn-sm btn-success" href="{% url 'login' %}">Login</a>&nbsp;
-        <a class="btn btn-sm btn-primary" href="{% url 'register' %}">Register</a>
+          <a href="{% url 'login' %}" class="btn btn-success btn-sm mr-1">
+            Login
+          </a>
+          <a href="{% url 'register' %}" class="btn btn-primary btn-sm">
+            Register
+          </a>
         {% endif %}
       </div>
 
@@ -70,10 +72,10 @@
   </header>
 
   <!-- Categories -->
-  <div class="nav-scroller py-1 mb-2">
-    <nav class="nav d-flex justify-content-between">
+  <div class="nav-scroller py-2 mb-3">
+    <nav class="nav d-flex flex-nowrap overflow-auto">
       {% for category in categories %}
-        <a class="p-2 text-muted" href="{% url 'posts_by_category' category.id %}">
+        <a class="nav-link text-muted px-3" href="{% url 'posts_by_category' category.id %}">
           {{ category.category_name }}
         </a>
       {% endfor %}
@@ -84,7 +86,7 @@
   {% block content %}{% endblock %}
 
   <!-- Footer -->
-  <footer class="blog-footer">
+  <footer class="blog-footer text-center mt-4">
     <p>Django blog built by <b class="text-primary">Gopinath Pal</b></p>
   </footer>
 
