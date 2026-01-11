@@ -32,8 +32,10 @@
 
                         {% if comments %}
                             {% for comment in comments %}
-                                <div class="card mb-2 shadow-sm">
-                                    <div class="card-body py-2">
+                            <div class="card mb-2 shadow-sm">
+                                <div class="card-body py-2 d-flex justify-content-between align-items-start">
+                                    
+                                    <div>
                                         <p class="mb-1">{{ comment }}</p>
 
                                         <small class="text-muted">
@@ -41,7 +43,17 @@
                                             · {{ comment.created_at|timesince }} ago
                                         </small>
                                     </div>
+
+                                    {% if user == comment.user %}
+                                    <form method="post" action="{% url 'delete_comment' comment.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn        btn-link p-0 text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
                                 </div>
+                            </div>
                             {% endfor %}
                         {% else %}
                             <p class="text-muted">No comments yet. Be the first to comment!</p>

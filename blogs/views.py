@@ -5,6 +5,8 @@ from django.db.models import Q
 from .forms import RegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -67,6 +69,26 @@ def blogs(request, slug):
     }
     return render(request, 'blogs.html', context)
 
+from django.http import HttpResponseRedirect
+
+
+
+@login_required
+def delete_comment(request, id):
+    comment = get_object_or_404(Comment, id=id)
+
+    if comment.user != request.user:
+        return HttpResponseRedirect(
+            request.META.get('HTTP_REFERER', '/')
+        )
+
+    comment.delete()
+    return HttpResponseRedirect(
+        request.META.get('HTTP_REFERER', '/')
+    )
+
+
+
 
 def search(request):
     keyword = request.GET.get('keyword', '').strip()
@@ -75,6 +97,8 @@ def search(request):
     else:
         blogs = Blog.objects.filter(Q(title__icontains=keyword) | Q(short_description__icontains=keyword) | Q(blog_body__icontains=keyword), status='Published')
     return render(request, 'search.html', {'blogs': blogs, 'keyword': keyword})
+
+
 
 def register(request):
     if request.method == 'POST':
