@@ -71,15 +71,22 @@
     </div>
   </header>
 
-  <!-- Categories -->
-  <div class="nav-scroller py-2 mb-3">
-    <nav class="nav d-flex flex-nowrap overflow-auto">
-      {% for category in categories %}
-        <a class="nav-link text-muted px-3" href="{% url 'posts_by_category' category.id %}">
-          {{ category.category_name }}
-        </a>
-      {% endfor %}
-    </nav>
+  <!-- Categories (FIXED & RESPONSIVE) -->
+  <div class="py-2 mb-3">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex flex-wrap justify-content-center">
+          {% for category in categories %}
+            <a
+              href="{% url 'posts_by_category' category.id %}"
+              class="badge badge-light border text-muted m-1 px-3 py-2"
+            >
+              {{ category.category_name }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Main Content -->

@@ -1,69 +1,91 @@
 {% extends "base.html" %}
-{% block title %}Post page{% endblock %}
+{% block title %}Users page{% endblock %}
 {% block content %}
-<div class="row">
-    <!-- Left sidebar -->
-    <!-- load the sidebar here -->
-    {% include "dashboard/sidebar.html" %}
 
-    <!-- Right side content -->
-    <div class="col-md-9">
-        {% if perms.auth.view_user %}
-        <h2>All Users</h2>
-        <a href="{% url 'add_user' %}" class="btn btn-dark text-light float-right mb-2">Add User</a>
-        <table class="table table-hover">
-            <thead class="text-center">
-                    <tr>
-                        <th>#</th>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Active</th>
-                        <th>Staff</th>
-                        <th>Superuser</th>
-                        <th>Action</th>
-                    </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td class="text-center align-middle">{{forloop.counter}}</th>
-                    <td class="text-center align-middle">{{user.first_name}} {{user.last_name}}</td>
-                    <td class="text-center align-middle">{{user.username}}</td>
-                    <td class="text-center align-middle">{{user.email}}</td>
-                    <td class="text-center align-middle">
-                        {% if user.is_active %}
-                            <span class="text-success">Active</span>
-                        {% else %}
-                            <span class="text-danger">Inactive</span>
-                        {% endif %}
-                    </td>
-                    <td class="text-center align-middle">
-                        {% if user.is_staff %}
-                            <span class="text-success">Staff</span>
-                        {% else %}
-                            <span class="text-danger">Not Staff</span>
-                        {% endif %}
-                    </td>
-                    <td class="text-center align-middle">
-                        {% if user.is_superuser %}
-                            <span class="text-success">Superuser</span>
-                        {% else %}
-                            <span class="text-danger">Not Superuser</span>
-                        {% endif %}
-                    </td>
-                    <td class="text-center align-middle">
-                        <a href="{% url 'edit_user' user.id %}"><i class="fa fa-edit text-primary"></i></a>
-                        &nbsp;
-                        <a href="{% url 'delete_user' user.id %}"><i class="fa fa-trash text-danger"></i></a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <h5 class="text-danger">You do not have permission to view this page</h5>
-        {% endif %}
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Left sidebar -->
+        {% include "dashboard/sidebar.html" %}
+
+        <!-- Right side content -->
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            {% if perms.auth.view_user %}
+            <h2>All Users</h2>
+
+            <a href="{% url 'add_user' %}" class="btn btn-dark text-light float-md-right mb-2">
+                Add User
+            </a>
+
+            <!-- Responsive table wrapper -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-center">
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Active</th>
+                            <th>Staff</th>
+                            <th>Superuser</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td class="text-center align-middle">{{ forloop.counter }}</td>
+                            <td class="text-center align-middle">{{ user.first_name }} {{ user.last_name }}</td>
+                            <td class="text-center align-middle">{{ user.username }}</td>
+                            <td class="text-center align-middle">{{ user.email }}</td>
+
+                            <td class="text-center align-middle">
+                                {% if user.is_active %}
+                                    <span class="text-success">Active</span>
+                                {% else %}
+                                    <span class="text-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center align-middle">
+                                {% if user.is_staff %}
+                                    <span class="text-success">Staff</span>
+                                {% else %}
+                                    <span class="text-danger">Not Staff</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center align-middle">
+                                {% if user.is_superuser %}
+                                    <span class="text-success">Superuser</span>
+                                {% else %}
+                                    <span class="text-danger">Not Superuser</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center align-middle">
+                                <a href="{% url 'edit_user' user.id %}">
+                                    <i class="fa fa-edit text-primary"></i>
+                                </a>
+                                &nbsp;
+                                <a href="{% url 'delete_user' user.id %}">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            <h5 class="text-danger">You do not have permission to view this page</h5>
+            {% endif %}
+        </div>
+
     </div>
 </div>
+
 {% endblock %}
