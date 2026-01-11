@@ -1,28 +1,40 @@
 {% extends "base.html" %}
 {% block title %}Blog page{% endblock %}
 {% block content %}
+
 <!-- Page content-->
-<div class="container mt-5">
+<div class="container mt-5 bg-white p-4 rounded shadow-sm">
     <div class="row">
         <div class="col-lg-8">
+
             <!-- Post content-->
             <article>
+
                 <!-- Post header-->
                 <header class="mb-4">
-                    <!-- Post title-->
-                    <h1 class="fw-bolder mb-1">{{single_blog.title}}</h1>
-                    <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted on {{single_blog.created_at}} by {{single_blog.author}}</div>
-                    <!-- Post category-->
-                    <a href="{% url 'posts_by_category' single_blog.category.id %}" class="badge badge-warning px-3 py-2 text-decoration-none text-dark">
-                    {{ single_blog.category }}</a>
+                    <h1 class="fw-bolder mb-1">{{ single_blog.title }}</h1>
+
+                    <div class="text-muted fst-italic mb-2">
+                        Posted on {{ single_blog.created_at }} by {{ single_blog.author }}
+                    </div>
+
+                    <a href="{% url 'posts_by_category' single_blog.category.id %}"
+                       class="badge badge-warning px-3 py-2 text-decoration-none text-dark">
+                        {{ single_blog.category }}
+                    </a>
                 </header>
-                <!-- Preview image figure-->
-                <figure class="mb-4"><img class="img-fluid rounded" src="{{single_blog.featured_image.url}}" alt="..." /></figure>
-                <!-- Post content-->
-                <section class="mb-5">
-                    <h3 class="fs-5 mb-4">{{single_blog.short_description}}</h3>
-                    <p class="fs-5 mb-4">{{single_blog.blog_body}}</p>
+
+                <!-- Preview image-->
+                <figure class="mb-4">
+                    <img class="img-fluid rounded"
+                         src="{{ single_blog.featured_image.url }}"
+                         alt="">
+                </figure>
+
+                <!-- Post body-->
+                <section class="mb-5 text-dark">
+                    <h3 class="fs-5 mb-4">{{ single_blog.short_description }}</h3>
+                    <p class="fs-5 mb-4">{{ single_blog.blog_body }}</p>
 
                     <!-- Comments -->
                     <div class="mt-4">
@@ -32,97 +44,108 @@
 
                         {% if comments %}
                             {% for comment in comments %}
-                            <div class="card mb-2 shadow-sm">
-                                <div class="card-body py-2 d-flex justify-content-between align-items-start">
-                                    
-                                    <div>
-                                        <p class="mb-1">{{ comment }}</p>
+                                <div class="card mb-2 shadow-sm">
+                                    <div class="card-body py-2 d-flex justify-content-between align-items-start">
 
-                                        <small class="text-muted">
-                                            By <strong>{{ comment.user.username }}</strong>
-                                            · {{ comment.created_at|timesince }} ago
-                                        </small>
+                                        <div>
+                                            <p class="mb-1">{{ comment }}</p>
+                                            <small class="text-muted">
+                                                By <strong>{{ comment.user.username }}</strong>
+                                                · {{ comment.created_at|timesince }} ago
+                                            </small>
+                                        </div>
+
+                                        {% if user == comment.user or perms.auth.view_user %}
+                                            <form method="post"
+                                                  action="{% url 'delete_comment' comment.id %}"
+                                                  class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        class="btn btn-link p-0 text-danger"
+                                                        onclick="return confirm('Delete this comment?');">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+
                                     </div>
-
-                                    {% if user == comment.user %}
-                                    <form method="post" action="{% url 'delete_comment' comment.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn        btn-link p-0 text-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
-                                    {% endif %}
                                 </div>
-                            </div>
                             {% endfor %}
                         {% else %}
-                            <p class="text-muted">No comments yet. Be the first to comment!</p>
+                            <p class="text-muted text-center mt-4">
+                                No comments yet. Be the first to comment!
+                            </p>
                         {% endif %}
                     </div>
 
                     {% if user.is_authenticated %}
-                    <!-- Comment Form -->
-                    <div class="card mt-4 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="mb-3">Leave a Comment</h5>
+                        <!-- Comment Form -->
+                        <div class="card mt-4 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="mb-3">Leave a Comment</h5>
 
-                            <form method="post">
-                                {% csrf_token %}
+                                <form method="post">
+                                    {% csrf_token %}
 
-                                <div class="form-group">
-                                    <textarea
-                                        name="comment"
-                                        class="form-control"
-                                        rows="3"
-                                        placeholder="Write your comment..."
-                                        required
-                                    ></textarea>
-                                </div>
+                                    <div class="form-group">
+                                        <textarea name="comment"
+                                                  class="form-control"
+                                                  rows="3"
+                                                  placeholder="Write your comment..."
+                                                  required></textarea>
+                                    </div>
 
-                                <button type="submit" class="btn btn-primary mt-2">
-                                    Submit
-                                </button>
-                            </form>
+                                    <button type="submit" class="btn btn-primary mt-2">
+                                        Submit
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
                     {% else %}
                         <div class="alert alert-info mt-3">
                             Please <a href="{% url 'login' %}" class="font-weight-bold">log in</a>
                             to write a comment.
                         </div>
                     {% endif %}
+
                 </section>
             </article>
         </div>
-        <!-- Side widgets-->
+
+        <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- Categories widget-->
+
+            <!-- Categories -->
             <div class="card mb-4 p-3">
                 <h4 class="font-italic">Categories</h4>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                {% for category in categories %}
-                                    <li><a href="{% url 'posts_by_category' category.id %}">{{category.category_name}}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Side widget-->
-            {% if social_links %}
-            <div class="card mb-4 p-3">
-                <h4 class="font-italic">Follow Us</h4>
-                <ol class="list-unstyled">
-                    {% for i in social_links %}
-                    <li><a href="{{i.link}}" target="_blank">{{i.platform}}</a></li>
+                <ul class="list-unstyled mb-0">
+                    {% for category in categories %}
+                        <li>
+                            <a href="{% url 'posts_by_category' category.id %}">
+                                {{ category.category_name }}
+                            </a>
+                        </li>
                     {% endfor %}
-                </ol>
+                </ul>
             </div>
+
+            <!-- Social links -->
+            {% if social_links %}
+                <div class="card mb-4 p-3">
+                    <h4 class="font-italic">Follow Us</h4>
+                    <ol class="list-unstyled">
+                        {% for i in social_links %}
+                            <li>
+                                <a href="{{ i.link }}" target="_blank">
+                                    {{ i.platform }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
             {% endif %}
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -55,15 +55,22 @@
                                 {% endif %}
                             </td>
 
+                            <!-- author and admin can edit and delete -->
                             <td class="text-center align-middle">
-                                <a href="{% url 'edit_post' post.id %}">
-                                    <i class="fa fa-edit text-primary"></i>
-                                </a>
-                                &nbsp;
-                                <a href="{% url 'delete_post' post.id %}">
-                                    <i class="fa fa-trash text-danger"></i>
-                                </a>
+                                {% if user == post.author or perms.auth.view_user %}
+                                    <a href="{% url 'edit_post' post.id %}">
+                                        <i class="fa fa-edit text-primary"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a href="{% url 'delete_post' post.id %}">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
                             </td>
+                            <!-- end -->
+
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -36,15 +36,23 @@
                             <td class="text-center align-middle">{{ cat }}</td>
                             <td class="text-center align-middle">{{ cat.created_at }}</td>
                             <td class="text-center align-middle">{{ cat.updated_at }}</td>
+
+                            <!-- ✅ ONLY CHANGE IS HERE -->
                             <td class="text-center align-middle">
-                                <a href="{% url 'edit_category' cat.id %}">
-                                    <i class="fa fa-edit text-primary"></i>
-                                </a>
-                                &nbsp;
-                                <a href="{% url 'delete_category' cat.id %}">
-                                    <i class="fa fa-trash text-danger"></i>
-                                </a>
+                                {% if perms.auth.view_user %}
+                                    <a href="{% url 'edit_category' cat.id %}">
+                                        <i class="fa fa-edit text-primary"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a href="{% url 'delete_category' cat.id %}">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
                             </td>
+                            <!-- ✅ END -->
+
                         </tr>
                         {% endfor %}
                     </tbody>

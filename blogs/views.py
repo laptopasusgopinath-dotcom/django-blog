@@ -69,7 +69,6 @@ def blogs(request, slug):
     }
     return render(request, 'blogs.html', context)
 
-from django.http import HttpResponseRedirect
 
 
 
