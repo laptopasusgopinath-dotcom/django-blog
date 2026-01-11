@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-r=-*8wv+jk!28j5#lvc4xh+_7jb+_c@_=4wi7-($=yh3+zfm_x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gopinathpal.pythonanywhere.com']
 
 
 # Application definition
@@ -127,7 +127,7 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR/'media'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
